@@ -295,10 +295,15 @@ class DashboardOut(BaseModel):
 
 
 class CreatorRfpOut(BaseModel):
+    """크리에이터에게 보여주는 RFP.
+
+    ⚠️ 전체 캠페인 예산(budget_range)은 절대 포함하지 않는다 —
+    인플루언서별 단가가 제각각이라 공유 금지 정보. 크리에이터는 본인 견적만 제시한다.
+    """
+
     campaign_id: int
     campaign_name: str
     ad_type: str
-    budget_range: str | None
     content_format: str | None
     longform_minutes: int | None
     shortform_minutes: int | None

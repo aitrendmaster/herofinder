@@ -226,8 +226,8 @@ function CreatorPortal({ session, onLogout }: { session: CreatorSession; onLogou
                   <ProcessBar stages={active.stages} />
                 </div>
                 <dl className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2 border-t border-neutral-100 pt-4 text-sm">
-                  <dt className="text-neutral-400">예산</dt>
-                  <dd>{active.budget_range ?? "협의"}</dd>
+                  <dt className="text-neutral-400">보수</dt>
+                  <dd>견적 제안 후 개별 협의</dd>
                   <dt className="text-neutral-400">콘텐츠 규격</dt>
                   <dd>
                     {active.content_format === "package"

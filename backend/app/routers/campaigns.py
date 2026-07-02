@@ -117,12 +117,13 @@ async def dispatch_rfp(
 
         # contact_email은 서버 측에서만 사용 — 응답에는 마스킹된 값만 노출
         if inf.contact_email:
+            # ⚠️ 전체 캠페인 예산은 크리에이터 비노출 (인플루언서별 단가 상이 — 공유 금지)
             body = (
                 f"[Hero Finder] 캠페인 제안: {campaign.name}\n\n"
                 f"광고 타입: {campaign.ad_type}\n"
-                f"예산: {campaign.budget_range or '협의'}\n"
                 f"내용: {campaign.content_detail or '-'}\n"
-                f"납품 기한: {campaign.deadline or '협의'}\n\n"
+                f"납품 기한: {campaign.deadline or '협의'}\n"
+                f"보수: 크리에이터님의 견적 제안을 받아 개별 협의합니다\n\n"
                 f"▶ Hero Finder 크리에이터 포털에서 견적 제출·메시지 소통이 가능합니다.\n"
                 f"   포털: {CREATOR_PORTAL_URL}\n"
                 f"   로그인 이메일: {inf.contact_email}\n"

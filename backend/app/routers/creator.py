@@ -118,7 +118,6 @@ async def creator_rfps(
                 campaign_id=campaign.id,
                 campaign_name=campaign.name,
                 ad_type=campaign.ad_type,
-                budget_range=campaign.budget_range,
                 content_format=campaign.content_format,
                 longform_minutes=campaign.longform_minutes,
                 shortform_minutes=campaign.shortform_minutes,

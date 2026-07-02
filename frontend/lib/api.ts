@@ -200,11 +200,11 @@ export interface CreatorSession {
   channel: string;
 }
 
+// ⚠️ 전체 캠페인 예산(budget_range)은 크리에이터에게 절대 노출하지 않는다 (개별 단가 정보 보호)
 export interface CreatorRfp {
   campaign_id: number;
   campaign_name: string;
   ad_type: string;
-  budget_range: string | null;
   content_format: string | null;
   longform_minutes: number | null;
   shortform_minutes: number | null;
