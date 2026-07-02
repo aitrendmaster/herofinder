@@ -6,6 +6,16 @@
 
 ---
 
+## 0. 미션 & 운영 원칙 (2026-07-02, YJ 확정)
+
+- **목표**: 인플루언서 섭외 + 소통 운영 + 콘텐츠 제작 점검을 아우르는 **통합 에이전트 솔루션**
+- **주요 고객**: 인플루언서 섭외·마케팅 협업이 필요한 클라이언트 — 대기업 ~ 중소기업·소규모 사업자, 그리고 **광고대행사(에이전시)**
+- **핵심 가치**: ① 크리에이터 풀 큐레이션 품질 ② 정보 데이터 정확도 ③ KPI·ROI 측정
+- **절대 제약**: 외부 API·외부 솔루션 연결이 필요하면 **반드시 YJ 승인을 먼저 받는다**
+- 리드: Fable (메인 세션) — 오케스트레이션 규칙은 워크스페이스 루트 CLAUDE.md §0 참조
+
+---
+
 ## 1. 프로젝트 개요
 
 - **서비스명**: Hero Finder (구 명칭: 인플루언서 허브)
@@ -338,7 +348,31 @@ PATCH /api/deliverables/{id}                   검수 (approve → published)
 POST /api/contracts/{id}/settlements           정산 생성 (방식 선택)
 POST /api/admin/blacklist                      블랙리스트 등록
 GET  /api/admin/blacklist                      블랙리스트 조회
+
+# 대시보드·알림 (클라이언트)
+GET  /api/dashboard                            전체 캠페인 + 진행 단계 + 미확인 알림 수
+GET  /api/campaigns/{id}/progress              10단계 프로세스 라인바 데이터
+GET  /api/notifications                        클라이언트 알림 (?unread_only=)
+PATCH /api/notifications/{id}/read             읽음 처리
+POST /api/admin/reminders/run                  리마인드 스윕 수동 트리거 (자동 6h 주기)
+
+# 크리에이터 포털 (X-Creator-Token 헤더 인증)
+POST /api/auth/creator/login                   이메일 + 접속 코드 로그인
+GET  /api/creator/me                           내 세션 정보
+GET  /api/creator/rfps                         받은 RFP 목록 (+진행 단계)
+POST /api/creator/campaigns/{id}/quotes        견적 제출 (influencer_id는 토큰 기준 강제)
+GET/POST /api/creator/campaigns/{id}/messages  클라이언트와 메시지
+GET  /api/creator/notifications                내 알림 (+/{id}/read)
 ```
+
+### 11-8. 크리에이터 계정 & 알림 규칙
+
+- **계정 자동 발급**: RFP 송부(`dispatch`) 시 `creator_accounts`에 자동 생성 — 접속 코드(uuid)가 RFP 이메일에 포함됨. 포털: `/creator` (정식 JWT는 Phase 2-4)
+- **진행 단계 10단계** (`services/progress.py`): RFP 등록→AI 추천→RFP 송부→크리에이터 회신→견적 합의→가계약→스토리보드 확정→납품→검수/공개→정산 완료. DB 실제 상태로 판정(별도 상태 필드 동기화 불필요)
+- **알림 2종** (`services/notification_service.py`):
+  - `event` — 상태 전환 시 즉시 (송부·견적·계약·가이드·스토리보드·납품·검수·정산 전 지점에 훅)
+  - `reminder` — 미처리 업무 스윕 (6시간 주기 백그라운드 + 수동 트리거, 동일 대상·사유 24h 중복 방지)
+- 크리에이터 알림은 이메일 발송도 시도 (SendGrid 미설정 시 시뮬레이션 로그)
 
 ---
 

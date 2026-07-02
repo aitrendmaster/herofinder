@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from ..database import get_db
 from ..models.orm_models import BlacklistEntry
 from ..models.schemas import BlacklistCreate, BlacklistOut
+from ..services.notification_service import get_sweep_status, run_reminder_sweep
 from ..services.pipeline import get_pipeline_status, run_weekly_pipeline
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
@@ -21,6 +22,13 @@ async def trigger_pipeline(background_tasks: BackgroundTasks):
 def pipeline_status():
     """플랫폼별 수집 상태/성공률."""
     return get_pipeline_status()
+
+
+@router.post("/reminders/run")
+async def trigger_reminders():
+    """미처리 업무 리마인드 스윕 수동 트리거 (자동은 6시간 주기)."""
+    created = await run_reminder_sweep()
+    return {"status": "completed", "created": created, **get_sweep_status()}
 
 
 @router.post("/blacklist", response_model=BlacklistOut)

@@ -239,6 +239,37 @@ class BlacklistEntry(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
 
+class CreatorAccount(Base):
+    """크리에이터 로그인 계정 — RFP 송부 시 자동 발급, 접속 코드가 이메일로 전달됨."""
+
+    __tablename__ = "creator_accounts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    influencer_id: Mapped[int] = mapped_column(ForeignKey("influencers.id"), unique=True)
+    email: Mapped[str] = mapped_column(String(255))
+    access_code: Mapped[str] = mapped_column(String(64), unique=True)  # 로그인 토큰 겸용
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    last_login_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+
+    influencer: Mapped["Influencer"] = relationship()
+
+
+class Notification(Base):
+    """업무 알림 — 이벤트 발생 시 + 미처리 업무 리마인드 스윕에서 생성."""
+
+    __tablename__ = "notifications"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    recipient_type: Mapped[str] = mapped_column(String(10))  # client | creator
+    recipient_id: Mapped[int] = mapped_column(Integer, default=0)  # creator=influencer_id, client=0(단일 운영 계정)
+    campaign_id: Mapped[int | None] = mapped_column(ForeignKey("campaigns.id"), nullable=True)
+    contract_id: Mapped[int | None] = mapped_column(ForeignKey("contracts.id"), nullable=True)
+    kind: Mapped[str] = mapped_column(String(30))  # event | reminder
+    message: Mapped[str] = mapped_column(Text)
+    is_read: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+
 class Message(Base):
     __tablename__ = "messages"
 

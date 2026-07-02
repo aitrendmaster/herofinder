@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from ..database import get_db
 from ..models.orm_models import Influencer, Message, RfpDispatch
 from ..models.schemas import InboundEmailWebhook
+from ..services.notification_service import CLIENT, notify
 
 router = APIRouter(prefix="/api/webhooks", tags=["webhooks"])
 
@@ -56,6 +57,11 @@ async def email_inbound(payload: InboundEmailWebhook, db: AsyncSession = Depends
             direction="inbound",
             body=payload.text or payload.subject,
         )
+    )
+    await notify(
+        db, CLIENT, 0,
+        f"크리에이터 #{influencer_id}의 이메일 회신이 도착했습니다 (캠페인 #{campaign_id}).",
+        campaign_id=campaign_id,
     )
     await db.commit()
     return {"status": "received", "campaign_id": campaign_id, "influencer_id": influencer_id}

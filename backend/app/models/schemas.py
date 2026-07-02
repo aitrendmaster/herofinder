@@ -109,12 +109,17 @@ class MessageOut(BaseModel):
     created_at: datetime
 
 
-class QuoteCreate(BaseModel):
-    influencer_id: int
+class CreatorQuoteIn(BaseModel):
+    """크리에이터 포털 견적 제출 — influencer_id는 토큰에서 결정."""
+
     content_plan: str | None = None
     content_format: str | None = None
     length_minutes: int | None = None
     amount: int | None = None
+
+
+class QuoteCreate(CreatorQuoteIn):
+    influencer_id: int
 
 
 class QuoteOut(QuoteCreate):
@@ -236,6 +241,75 @@ class BlacklistOut(BlacklistCreate):
 
     id: int
     created_at: datetime
+
+
+class CreatorLoginIn(BaseModel):
+    email: str
+    access_code: str
+
+
+class CreatorSessionOut(BaseModel):
+    token: str  # access_code 그대로 — X-Creator-Token 헤더로 전달
+    influencer_id: int
+    name: str
+    channel: str
+
+
+class NotificationOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    recipient_type: str
+    recipient_id: int
+    campaign_id: int | None
+    contract_id: int | None
+    kind: str
+    message: str
+    is_read: bool
+    created_at: datetime
+
+
+class StageOut(BaseModel):
+    key: str
+    label: str
+    done: bool
+    current: bool
+
+
+class CampaignProgressOut(BaseModel):
+    campaign_id: int
+    campaign_name: str
+    status: str
+    stages: list[StageOut]
+    current_stage: str
+
+
+class DashboardItemOut(CampaignProgressOut):
+    created_at: datetime
+    next_action: str
+
+
+class DashboardOut(BaseModel):
+    campaigns: list[DashboardItemOut]
+    unread_notifications: int
+
+
+class CreatorRfpOut(BaseModel):
+    campaign_id: int
+    campaign_name: str
+    ad_type: str
+    budget_range: str | None
+    content_format: str | None
+    longform_minutes: int | None
+    shortform_minutes: int | None
+    additional_rewards: str | None
+    provided_resources: str | None
+    must_include: str | None
+    deadline: date | None
+    dispatch_status: str
+    sent_at: datetime
+    stages: list[StageOut]
+    current_stage: str
 
 
 class InboundEmailWebhook(BaseModel):

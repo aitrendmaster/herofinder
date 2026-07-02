@@ -8,10 +8,12 @@ export const metadata: Metadata = {
 };
 
 const NAV = [
+  { href: "/dashboard", label: "대시보드" },
   { href: "/discovery", label: "인플루언서 탐색" },
   { href: "/brief", label: "RFP 작성" },
   { href: "/recommend", label: "AI 추천" },
   { href: "/messages", label: "메시지함" },
+  { href: "/creator", label: "크리에이터" },
 ];
 
 export default function RootLayout({

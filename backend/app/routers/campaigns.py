@@ -2,8 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+import uuid
+
 from ..database import get_db
-from ..models.orm_models import Campaign, Influencer, Message, RfpDispatch
+from ..models.orm_models import Campaign, CreatorAccount, Influencer, Message, RfpDispatch
 from ..models.schemas import (
     CampaignCreate,
     CampaignOut,
@@ -17,7 +19,28 @@ from ..models.schemas import (
 from ..routers.influencers import _latest_snapshot
 from ..services.email_service import mask_email, send_rfp_email
 from ..services.matching_service import estimate_kpi, rule_based_match_score
+from ..services.notification_service import CREATOR, notify
 from ..services.recommendation import build_recommendations
+
+CREATOR_PORTAL_URL = "http://localhost:3000/creator"  # 배포 시 실제 도메인으로 교체
+
+
+async def _ensure_creator_account(db: AsyncSession, inf: Influencer) -> CreatorAccount:
+    """RFP 송부 시 크리에이터 계정 자동 발급 (이미 있으면 재사용)."""
+    account = (
+        await db.execute(
+            select(CreatorAccount).where(CreatorAccount.influencer_id == inf.id)
+        )
+    ).scalar_one_or_none()
+    if not account:
+        account = CreatorAccount(
+            influencer_id=inf.id,
+            email=inf.contact_email or "",
+            access_code=uuid.uuid4().hex,
+        )
+        db.add(account)
+        await db.flush()
+    return account
 
 router = APIRouter(prefix="/api/campaigns", tags=["campaigns"])
 
@@ -89,6 +112,9 @@ async def dispatch_rfp(
             else None
         )
 
+        # 크리에이터 계정 자동 발급 — 포털 접속 코드가 RFP 이메일에 포함됨
+        account = await _ensure_creator_account(db, inf)
+
         # contact_email은 서버 측에서만 사용 — 응답에는 마스킹된 값만 노출
         if inf.contact_email:
             body = (
@@ -97,10 +123,19 @@ async def dispatch_rfp(
                 f"예산: {campaign.budget_range or '협의'}\n"
                 f"내용: {campaign.content_detail or '-'}\n"
                 f"납품 기한: {campaign.deadline or '협의'}\n\n"
-                f"본 메일에 회신하시면 클라이언트 메시지함으로 전달됩니다."
+                f"▶ Hero Finder 크리에이터 포털에서 견적 제출·메시지 소통이 가능합니다.\n"
+                f"   포털: {CREATOR_PORTAL_URL}\n"
+                f"   로그인 이메일: {inf.contact_email}\n"
+                f"   접속 코드: {account.access_code}\n"
             )
             await send_rfp_email(inf.contact_email, f"[RFP] {campaign.name}", body)
             recipients.append(mask_email(inf.contact_email))
+
+        await notify(
+            db, CREATOR, inf.id,
+            f"새 캠페인 제안(RFP)이 도착했습니다: '{campaign.name}' — 포털에서 견적을 제출해 주세요.",
+            campaign_id=campaign.id,
+        )
 
         db.add(
             RfpDispatch(

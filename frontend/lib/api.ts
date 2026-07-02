@@ -141,6 +141,147 @@ export const sendMessage = (campaignId: number, influencerId: number, body: stri
     body: JSON.stringify({ influencer_id: influencerId, body }),
   });
 
+// ---------- 대시보드 / 진행 단계 ----------
+
+export interface Stage {
+  key: string;
+  label: string;
+  done: boolean;
+  current: boolean;
+}
+
+export interface CampaignProgress {
+  campaign_id: number;
+  campaign_name: string;
+  status: string;
+  stages: Stage[];
+  current_stage: string;
+}
+
+export interface DashboardItem extends CampaignProgress {
+  created_at: string;
+  next_action: string;
+}
+
+export interface Dashboard {
+  campaigns: DashboardItem[];
+  unread_notifications: number;
+}
+
+export interface Notification {
+  id: number;
+  recipient_type: "client" | "creator";
+  recipient_id: number;
+  campaign_id: number | null;
+  contract_id: number | null;
+  kind: "event" | "reminder";
+  message: string;
+  is_read: boolean;
+  created_at: string;
+}
+
+export const getDashboard = () => request<Dashboard>("/api/dashboard");
+
+export const getCampaignProgress = (campaignId: number) =>
+  request<CampaignProgress>(`/api/campaigns/${campaignId}/progress`);
+
+export const getNotifications = (unreadOnly = false) =>
+  request<Notification[]>(`/api/notifications?unread_only=${unreadOnly}`);
+
+export const readNotification = (id: number) =>
+  request<Notification>(`/api/notifications/${id}/read`, { method: "PATCH" });
+
+// ---------- 크리에이터 포털 ----------
+
+export interface CreatorSession {
+  token: string;
+  influencer_id: number;
+  name: string;
+  channel: string;
+}
+
+export interface CreatorRfp {
+  campaign_id: number;
+  campaign_name: string;
+  ad_type: string;
+  budget_range: string | null;
+  content_format: string | null;
+  longform_minutes: number | null;
+  shortform_minutes: number | null;
+  additional_rewards: string | null;
+  provided_resources: string | null;
+  must_include: string | null;
+  deadline: string | null;
+  dispatch_status: string;
+  sent_at: string;
+  stages: Stage[];
+  current_stage: string;
+}
+
+export interface QuoteInput {
+  content_plan?: string;
+  content_format?: string;
+  length_minutes?: number;
+  amount?: number;
+}
+
+const creatorHeaders = (token: string) => ({ "X-Creator-Token": token });
+
+export const creatorLogin = (email: string, accessCode: string) =>
+  request<CreatorSession>("/api/auth/creator/login", {
+    method: "POST",
+    body: JSON.stringify({ email, access_code: accessCode }),
+  });
+
+export const creatorRfps = (token: string) =>
+  request<CreatorRfp[]>("/api/creator/rfps", { headers: { "Content-Type": "application/json", ...creatorHeaders(token) } });
+
+export const creatorSubmitQuote = (token: string, campaignId: number, quote: QuoteInput) =>
+  request(`/api/creator/campaigns/${campaignId}/quotes`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...creatorHeaders(token) },
+    body: JSON.stringify(quote),
+  });
+
+export const creatorMessages = (token: string, campaignId: number) =>
+  request<Message[]>(`/api/creator/campaigns/${campaignId}/messages`, {
+    headers: { "Content-Type": "application/json", ...creatorHeaders(token) },
+  });
+
+export const creatorSendMessage = (token: string, campaignId: number, body: string) =>
+  request<Message>(`/api/creator/campaigns/${campaignId}/messages`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...creatorHeaders(token) },
+    body: JSON.stringify({ body }),
+  });
+
+export const creatorNotifications = (token: string) =>
+  request<Notification[]>("/api/creator/notifications", {
+    headers: { "Content-Type": "application/json", ...creatorHeaders(token) },
+  });
+
+export const creatorReadNotification = (token: string, id: number) =>
+  request<Notification>(`/api/creator/notifications/${id}/read`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...creatorHeaders(token) },
+  });
+
+export const creatorStore = {
+  getSession(): CreatorSession | null {
+    if (typeof window === "undefined") return null;
+    try {
+      const raw = localStorage.getItem("hf_creator_session");
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  },
+  setSession(session: CreatorSession | null) {
+    if (session) localStorage.setItem("hf_creator_session", JSON.stringify(session));
+    else localStorage.removeItem("hf_creator_session");
+  },
+};
+
 // 페이지 간 상태 전달 (선택 인플루언서 / 현재 캠페인)
 export const store = {
   getSelectedIds(): number[] {
