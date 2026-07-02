@@ -1,0 +1,24 @@
+# 기밀/민감 — 절대 커밋 금지
+refer/
+*.env
+.env*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+backend/herofinder.db
+backend/app/outputs/
+backend/app/uploads/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+next-env.d.ts
+
+# 기타
+.DS_Store
+*.log
