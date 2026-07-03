@@ -37,9 +37,20 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Hero Finder API", version="0.1.0", lifespan=lifespan)
 
+from .utils.config import get_settings
+
+_settings = get_settings()
+_allowed_origins = list({
+    "http://localhost:3000",
+    "http://localhost:5173",
+    _settings.frontend_base_url.rstrip("/"),
+})
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173"],
+    allow_origins=_allowed_origins,
+    # Vercel 프리뷰 배포(*-*.vercel.app)도 허용
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -22,7 +22,10 @@ from ..services.matching_service import estimate_kpi, rule_based_match_score
 from ..services.notification_service import CREATOR, notify
 from ..services.recommendation import build_recommendations
 
-CREATOR_PORTAL_URL = "http://localhost:3000/creator"  # 배포 시 실제 도메인으로 교체
+def _creator_portal_url() -> str:
+    from ..utils.config import get_settings
+
+    return f"{get_settings().frontend_base_url.rstrip('/')}/creator"
 
 
 async def _ensure_creator_account(db: AsyncSession, inf: Influencer) -> CreatorAccount:
@@ -125,7 +128,7 @@ async def dispatch_rfp(
                 f"납품 기한: {campaign.deadline or '협의'}\n"
                 f"보수: 크리에이터님의 견적 제안을 받아 개별 협의합니다\n\n"
                 f"▶ Hero Finder 크리에이터 포털에서 견적 제출·메시지 소통이 가능합니다.\n"
-                f"   포털: {CREATOR_PORTAL_URL}\n"
+                f"   포털: {_creator_portal_url()}\n"
                 f"   로그인 이메일: {inf.contact_email}\n"
                 f"   접속 코드: {account.access_code}\n"
             )

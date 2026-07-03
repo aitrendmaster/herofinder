@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     database_url: str = "sqlite+aiosqlite:///./herofinder.db"
+    # 프론트엔드 도메인 — CORS 허용 + RFP 이메일의 크리에이터 포털 링크에 사용
+    frontend_base_url: str = "http://localhost:3000"
 
     youtube_api_key: str = ""
     scrapecreators_api_key: str = ""
