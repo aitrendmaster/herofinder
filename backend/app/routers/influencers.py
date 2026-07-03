@@ -47,7 +47,7 @@ async def list_influencers(
     country: str | None = None,
     trending: bool | None = None,
     page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=100),
+    page_size: int = Query(20, ge=1, le=500),
     db: AsyncSession = Depends(get_db),
 ):
     query = select(Influencer).options(selectinload(Influencer.category))

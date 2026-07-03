@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   CHANNEL_LABELS,
@@ -19,7 +19,9 @@ const CHANNELS = ["youtube", "instagram", "tiktok"] as const;
 
 export default function DiscoveryPage() {
   const router = useRouter();
-  const [influencers, setInfluencers] = useState<Influencer[]>([]);
+  // 전체 리스트를 최초 1회만 로드 (우리 DB 조회 — 외부 스크래핑 아님).
+  // 필터는 브라우저 메모리에서 즉시 처리해 클릭마다 재요청하지 않는다.
+  const [all, setAll] = useState<Influencer[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [loading, setLoading] = useState(true);
@@ -30,31 +32,32 @@ export default function DiscoveryPage() {
   const [category, setCategory] = useState("");
   const [trendingOnly, setTrendingOnly] = useState(false);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const params: Record<string, string> = { page: "1", page_size: "50" };
-      if (tier) params.tier = tier;
-      if (channel) params.channel = channel;
-      if (category) params.category = category;
-      if (trendingOnly) params.trending = "true";
-      const data = await getInfluencers(params);
-      setInfluencers(data.items);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "불러오기 실패 — 백엔드(8000) 실행 여부를 확인하세요.");
-    } finally {
-      setLoading(false);
-    }
-  }, [tier, channel, category, trendingOnly]);
-
   useEffect(() => {
-    load();
-  }, [load]);
-
-  useEffect(() => {
-    getCategories().then(setCategories).catch(() => {});
+    Promise.all([
+      getInfluencers({ page: "1", page_size: "500" }),
+      getCategories().catch(() => [] as Category[]),
+    ])
+      .then(([data, cats]) => {
+        setAll(data.items);
+        setCategories(cats);
+      })
+      .catch((e) =>
+        setError(e instanceof Error ? e.message : "불러오기 실패 — 백엔드(8000) 실행 여부를 확인하세요."),
+      )
+      .finally(() => setLoading(false));
   }, []);
+
+  const influencers = useMemo(
+    () =>
+      all.filter(
+        (i) =>
+          (!tier || i.tier === tier) &&
+          (!channel || i.channel === channel) &&
+          (!category || i.category === category) &&
+          (!trendingOnly || i.is_trending),
+      ),
+    [all, tier, channel, category, trendingOnly],
+  );
 
   const toggle = (id: number) => {
     setSelected((prev) => {
@@ -83,7 +86,8 @@ export default function DiscoveryPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">인플루언서 탐색</h1>
           <p className="mt-2 text-sm text-neutral-500">
-            주간 업데이트되는 활성 인플루언서 리스트에서 캠페인 후보를 선택하세요.
+            자체 DB 기준 {all.length > 0 ? `${influencers.length} / ${all.length}명` : ""} · 주간
+            수집 파이프라인으로 갱신 (탐색 중 외부 API 호출 없음)
           </p>
         </div>
         <button
