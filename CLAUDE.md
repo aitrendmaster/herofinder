@@ -220,12 +220,12 @@ NEXT_PUBLIC_API_BASE_URL=       # Render 백엔드 URL
 ## 9. TODO (우선순위 순)
 
 ### Phase 1 — MVP
-- [ ] 모노레포 or 프론트/백 분리 레포 세팅 결정
-- [ ] Next.js 프로젝트 생성, 프로토타입을 페이지/컴포넌트로 분리 (`/discovery`, `/brief`, `/recommend`, `/messages`)
-- [ ] FastAPI(또는 NestJS) 백엔드 스캐폴딩 + PostgreSQL 스키마 마이그레이션 (위 5번 참조)
-- [ ] YouTube Data API 수집기 구현 (KR 시드 리스트 → 주간 스냅샷)
-- [ ] ScrapeCreators 연동 (Instagram KR, TikTok KR/US/SEA) — 계약/견적 선행
-- [ ] Render Cron 주간 파이프라인 + 활성도 스코어링 로직
+- [x] 모노레포 세팅 (frontend Next.js + backend FastAPI, repo: aitrendmaster/herofinder)
+- [x] Next.js 프로젝트 생성 (`/dashboard`, `/discovery`, `/brief`, `/recommend`, `/messages`, `/creator`) — Vercel 배포: herofinder-ebon.vercel.app
+- [x] FastAPI 백엔드 + PostgreSQL — Render 배포: herofinder.onrender.com (srv-d93hgn4vikkc73a9osng)
+- [x] YouTube Data API 수집기 (시드: `app/data/seed_channels.json` — PTK 리스트업 실채널 13개, 2026-07-03 프로덕션 반영)
+- [ ] ScrapeCreators 연동 (Instagram KR, TikTok KR/US/SEA) — 시드 계정 리스트 필요
+- [ ] Render Cron 주간 파이프라인 등록 (현재 수동 트리거: POST /api/admin/pipeline/run)
 - [ ] RFP 이메일 발송 (SendGrid) + Inbound Parse 웹훅으로 회신 수신
 - [ ] AI 매칭: 규칙 기반 → Claude API 기반 매칭 사유 생성으로 고도화
 - [ ] 클라이언트 인증 (이메일 로그인, JWT)
