@@ -115,5 +115,905 @@
   "country": "KR",
   "category": "교양",
   "source": "PTK 리스트업 (refer)"
+ },
+ {
+  "name": "먹방빵떡이",
+  "channel": "tiktok",
+  "channel_id": "korean1111211",
+  "handle": "korean1111211",
+  "country": "KR",
+  "category": "푸드",
+  "source": "tiktok search: 먹방"
+ },
+ {
+  "name": "여행플레이리스트",
+  "channel": "tiktok",
+  "channel_id": "trip_playlist",
+  "handle": "trip_playlist",
+  "country": "KR",
+  "category": "여행",
+  "source": "tiktok search: 여행 브이로그"
+ },
+ {
+  "name": "咲麗子 Sakurako",
+  "channel": "tiktok",
+  "channel_id": "sakurako_imai_315",
+  "handle": "sakurako_imai_315",
+  "country": "KR",
+  "category": "여행",
+  "source": "tiktok search: 여행 브이로그"
+ },
+ {
+  "name": "6/29🎂HBD🐈‍⬛윤채니👑Chenny",
+  "channel": "tiktok",
+  "channel_id": "yunchenny",
+  "handle": "yunchenny",
+  "country": "KR",
+  "category": "여행",
+  "source": "tiktok search: 여행 브이로그"
+ },
+ {
+  "name": "없어",
+  "channel": "tiktok",
+  "channel_id": "user987467117",
+  "handle": "user987467117",
+  "country": "KR",
+  "category": "여행",
+  "source": "tiktok search: 여행 브이로그"
+ },
+ {
+  "name": "Arinana ❤︎",
+  "channel": "tiktok",
+  "channel_id": "happy_life.7a",
+  "handle": "happy_life.7a",
+  "country": "KR",
+  "category": "여행",
+  "source": "tiktok search: 여행 브이로그"
+ },
+ {
+  "name": "🤼‍♀️Jangeunsil🏅",
+  "channel": "tiktok",
+  "channel_id": "sillllling",
+  "handle": "sillllling",
+  "country": "KR",
+  "category": "건강",
+  "source": "tiktok search: 운동 헬스"
+ },
+ {
+  "name": "𝗛𝗲𝗹𝗹𝗼 𝗛𝗼𝘂𝘀𝗲",
+  "channel": "tiktok",
+  "channel_id": "hellohouse_official",
+  "handle": "hellohouse_official",
+  "country": "KR",
+  "category": "건강",
+  "source": "tiktok search: 운동 헬스"
+ },
+ {
+  "name": "SportGirls🔥СпортивныеДевочки",
+  "channel": "tiktok",
+  "channel_id": "sweat.ass",
+  "handle": "sweat.ass",
+  "country": "KR",
+  "category": "건강",
+  "source": "tiktok search: 운동 헬스"
+ },
+ {
+  "name": "ТРЕНЕР ФІГУРИ⏳| ANHELINA",
+  "channel": "tiktok",
+  "channel_id": "wild.orchid_trainer",
+  "handle": "wild.orchid_trainer",
+  "country": "KR",
+  "category": "건강",
+  "source": "tiktok search: 운동 헬스"
+ },
+ {
+  "name": "Truetwerk",
+  "channel": "tiktok",
+  "channel_id": "truetwerk",
+  "handle": "truetwerk",
+  "country": "KR",
+  "category": "건강",
+  "source": "tiktok search: 운동 헬스"
+ },
+ {
+  "name": "#실버동건챌린지",
+  "channel": "tiktok",
+  "channel_id": ".7700439",
+  "handle": ".7700439",
+  "country": "KR",
+  "category": "건강",
+  "source": "tiktok search: 운동 헬스"
+ },
+ {
+  "name": "운동",
+  "channel": "tiktok",
+  "channel_id": "devon_no.1",
+  "handle": "devon_no.1",
+  "country": "KR",
+  "category": "건강",
+  "source": "tiktok search: 운동 헬스"
+ },
+ {
+  "name": "Gym",
+  "channel": "tiktok",
+  "channel_id": "gym92352",
+  "handle": "gym92352",
+  "country": "KR",
+  "category": "건강",
+  "source": "tiktok search: 운동 헬스"
+ },
+ {
+  "name": "Underweardisplay",
+  "channel": "tiktok",
+  "channel_id": "underweardisplay",
+  "handle": "underweardisplay",
+  "country": "KR",
+  "category": "건강",
+  "source": "tiktok search: 운동 헬스"
+ },
+ {
+  "name": "TEAM1LLUSION 노성율",
+  "channel": "tiktok",
+  "channel_id": "team1llusion",
+  "handle": "team1llusion",
+  "country": "KR",
+  "category": "건강",
+  "source": "tiktok search: 운동 헬스"
+ },
+ {
+  "name": "원호 | 워노티디 WONOTD | 패션코디가이드",
+  "channel": "tiktok",
+  "channel_id": "wonotd",
+  "handle": "wonotd",
+  "country": "KR",
+  "category": "패션",
+  "source": "tiktok search: 패션 코디"
+ },
+ {
+  "name": "요리레시피🧑‍🍳",
+  "channel": "tiktok",
+  "channel_id": "ananhh40",
+  "handle": "ananhh40",
+  "country": "KR",
+  "category": "푸드",
+  "source": "tiktok search: 요리 레시피"
+ },
+ {
+  "name": "요정레시피ㅣ요정ㅣ요리는정성",
+  "channel": "tiktok",
+  "channel_id": "yojeong_recipe",
+  "handle": "yojeong_recipe",
+  "country": "KR",
+  "category": "푸드",
+  "source": "tiktok search: 요리 레시피"
+ },
+ {
+  "name": "레시피 읽어주는 여자",
+  "channel": "tiktok",
+  "channel_id": "foodradio",
+  "handle": "foodradio",
+  "country": "KR",
+  "category": "푸드",
+  "source": "tiktok search: 요리 레시피"
+ },
+ {
+  "name": "아임레시피",
+  "channel": "tiktok",
+  "channel_id": "iam_recipe",
+  "handle": "iam_recipe",
+  "country": "KR",
+  "category": "푸드",
+  "source": "tiktok search: 요리 레시피"
+ },
+ {
+  "name": "동채 | 요리하는 상여자",
+  "channel": "tiktok",
+  "channel_id": "dongchae___",
+  "handle": "dongchae___",
+  "country": "KR",
+  "category": "푸드",
+  "source": "tiktok search: 요리 레시피"
+ },
+ {
+  "name": "한끼대첩:간단한 요리 레시피",
+  "channel": "tiktok",
+  "channel_id": "battle_of_hankkii",
+  "handle": "battle_of_hankkii",
+  "country": "KR",
+  "category": "푸드",
+  "source": "tiktok search: 요리 레시피"
+ },
+ {
+  "name": "까리레시피",
+  "channel": "tiktok",
+  "channel_id": "kkari.recipe",
+  "handle": "kkari.recipe",
+  "country": "KR",
+  "category": "푸드",
+  "source": "tiktok search: 요리 레시피"
+ },
+ {
+  "name": "SUHO",
+  "channel": "tiktok",
+  "channel_id": "hi.___light",
+  "handle": "hi.___light",
+  "country": "KR",
+  "category": "푸드",
+  "source": "tiktok search: 요리 레시피"
+ },
+ {
+  "name": "엄마와아들 Mom's Cooking",
+  "channel": "tiktok",
+  "channel_id": "koreanrecipe.k",
+  "handle": "koreanrecipe.k",
+  "country": "KR",
+  "category": "푸드",
+  "source": "tiktok search: 요리 레시피"
+ },
+ {
+  "name": "[햄지]Hamzy",
+  "channel": "tiktok",
+  "channel_id": "hamzy_korean",
+  "handle": "hamzy_korean",
+  "country": "KR",
+  "category": "푸드",
+  "source": "tiktok search: 요리 레시피"
+ },
+ {
+  "name": "지현쿡",
+  "channel": "tiktok",
+  "channel_id": "zihyuncook",
+  "handle": "zihyuncook",
+  "country": "KR",
+  "category": "푸드",
+  "source": "tiktok search: 요리 레시피"
+ },
+ {
+  "name": "톡톡시아 toctocsia",
+  "channel": "tiktok",
+  "channel_id": "toctocsia",
+  "handle": "toctocsia",
+  "country": "KR",
+  "category": "푸드",
+  "source": "tiktok search: 요리 레시피"
+ },
+ {
+  "name": "🐒개그맨 김영🐒",
+  "channel": "tiktok",
+  "channel_id": "comicbrother_gag",
+  "handle": "comicbrother_gag",
+  "country": "KR",
+  "category": "엔터",
+  "source": "tiktok search: 개그 코미디"
+ },
+ {
+  "name": "🐻‍❄️백곰메디칼🐻‍❄️",
+  "channel": "tiktok",
+  "channel_id": "828hbd",
+  "handle": "828hbd",
+  "country": "KR",
+  "category": "엔터",
+  "source": "tiktok search: 개그 코미디"
+ },
+ {
+  "name": "comicworld",
+  "channel": "tiktok",
+  "channel_id": "seoulcomicworld",
+  "handle": "seoulcomicworld",
+  "country": "KR",
+  "category": "엔터",
+  "source": "tiktok search: 개그 코미디"
+ },
+ {
+  "name": "🎤6/17 100DAY 규니🍓",
+  "channel": "tiktok",
+  "channel_id": "gyunie01",
+  "handle": "gyunie01",
+  "country": "KR",
+  "category": "엔터",
+  "source": "tiktok search: 개그 코미디"
+ },
+ {
+  "name": "유채훈의 웃음극장",
+  "channel": "tiktok",
+  "channel_id": "chaehun_0503",
+  "handle": "chaehun_0503",
+  "country": "KR",
+  "category": "엔터",
+  "source": "tiktok search: 개그 코미디"
+ },
+ {
+  "name": "드래곤트릭킹짐",
+  "channel": "tiktok",
+  "channel_id": "d.t.g_",
+  "handle": "d.t.g_",
+  "country": "KR",
+  "category": "엔터",
+  "source": "tiktok search: 개그 코미디"
+ },
+ {
+  "name": "DJ混音✨幻昼(抖音)",
+  "channel": "tiktok",
+  "channel_id": "ut9420",
+  "handle": "ut9420",
+  "country": "KR",
+  "category": "교양",
+  "source": "tiktok search: 공부 자기계발"
+ },
+ {
+  "name": "용쌤",
+  "channel": "tiktok",
+  "channel_id": "yong.teacher",
+  "handle": "yong.teacher",
+  "country": "KR",
+  "category": "교양",
+  "source": "tiktok search: 공부 자기계발"
+ },
+ {
+  "name": "대생가족",
+  "channel": "tiktok",
+  "channel_id": "gdsfamily4",
+  "handle": "gdsfamily4",
+  "country": "KR",
+  "category": "교양",
+  "source": "tiktok search: 공부 자기계발"
+ },
+ {
+  "name": "공대바보(K-student)",
+  "channel": "tiktok",
+  "channel_id": "joeseph0102",
+  "handle": "joeseph0102",
+  "country": "KR",
+  "category": "교양",
+  "source": "tiktok search: 공부 자기계발"
+ },
+ {
+  "name": "복구천재 꼬마신발",
+  "channel": "tiktok",
+  "channel_id": "little__shoes",
+  "handle": "little__shoes",
+  "country": "KR",
+  "category": "교양",
+  "source": "tiktok search: 공부 자기계발"
+ },
+ {
+  "name": "게임",
+  "channel": "tiktok",
+  "channel_id": "miniature388",
+  "handle": "miniature388",
+  "country": "KR",
+  "category": "엔터",
+  "source": "tiktok search: 게임"
+ },
+ {
+  "name": "게임",
+  "channel": "tiktok",
+  "channel_id": "hala201200",
+  "handle": "hala201200",
+  "country": "KR",
+  "category": "엔터",
+  "source": "tiktok search: 게임"
+ },
+ {
+  "name": "@ 게임💜",
+  "channel": "tiktok",
+  "channel_id": "435051id",
+  "handle": "435051id",
+  "country": "KR",
+  "category": "엔터",
+  "source": "tiktok search: 게임"
+ },
+ {
+  "name": "05게임녀",
+  "channel": "tiktok",
+  "channel_id": "user1538799344403",
+  "handle": "user1538799344403",
+  "country": "KR",
+  "category": "엔터",
+  "source": "tiktok search: 게임"
+ },
+ {
+  "name": "노래방",
+  "channel": "tiktok",
+  "channel_id": "groove79sound",
+  "handle": "groove79sound",
+  "country": "KR",
+  "category": "엔터",
+  "source": "tiktok search: 노래 커버"
+ },
+ {
+  "name": "캠핑제국 Camping Empire Fan",
+  "channel": "tiktok",
+  "channel_id": "aimsdbgygml",
+  "handle": "aimsdbgygml",
+  "country": "KR",
+  "category": "여행",
+  "source": "tiktok search: 캠핑"
+ },
+ {
+  "name": "강아지",
+  "channel": "tiktok",
+  "channel_id": "babycutedoge",
+  "handle": "babycutedoge",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "tiktok search: 강아지"
+ },
+ {
+  "name": "김짬뽕",
+  "channel": "instagram",
+  "channel_id": "kimjjambbong_",
+  "handle": "kimjjambbong_",
+  "country": "KR",
+  "category": "푸드",
+  "source": "instagram reels search: 먹방 맛집"
+ },
+ {
+  "name": "SANGIL JO",
+  "channel": "instagram",
+  "channel_id": "jofitness.kr",
+  "handle": "jofitness.kr",
+  "country": "KR",
+  "category": "푸드",
+  "source": "instagram reels search: 먹방 맛집"
+ },
+ {
+  "name": "오오티비(ootb)",
+  "channel": "instagram",
+  "channel_id": "ootb_studio",
+  "handle": "ootb_studio",
+  "country": "KR",
+  "category": "푸드",
+  "source": "instagram reels search: 먹방 맛집"
+ },
+ {
+  "name": "유나러부",
+  "channel": "instagram",
+  "channel_id": "_yunalooove",
+  "handle": "_yunalooove",
+  "country": "KR",
+  "category": "뷰티",
+  "source": "instagram reels search: 뷰티 메이크업"
+ },
+ {
+  "name": "맹결",
+  "channel": "instagram",
+  "channel_id": "00_04.15",
+  "handle": "00_04.15",
+  "country": "KR",
+  "category": "뷰티",
+  "source": "instagram reels search: 뷰티 메이크업"
+ },
+ {
+  "name": "혜민부원장",
+  "channel": "instagram",
+  "channel_id": "hyemin_makeup_",
+  "handle": "hyemin_makeup_",
+  "country": "KR",
+  "category": "뷰티",
+  "source": "instagram reels search: 뷰티 메이크업"
+ },
+ {
+  "name": "고경",
+  "channel": "instagram",
+  "channel_id": "azure_jass",
+  "handle": "azure_jass",
+  "country": "KR",
+  "category": "뷰티",
+  "source": "instagram reels search: 뷰티 메이크업"
+ },
+ {
+  "name": "민세령",
+  "channel": "instagram",
+  "channel_id": "r_rrng",
+  "handle": "r_rrng",
+  "country": "KR",
+  "category": "뷰티",
+  "source": "instagram reels search: 뷰티 메이크업"
+ },
+ {
+  "name": "GRAZY | 그레이지",
+  "channel": "instagram",
+  "channel_id": "gray__crazy",
+  "handle": "gray__crazy",
+  "country": "KR",
+  "category": "패션",
+  "source": "instagram reels search: 패션 코디"
+ },
+ {
+  "name": "이른 아침의 첫 이슬",
+  "channel": "instagram",
+  "channel_id": "ach_f_m.dew",
+  "handle": "ach_f_m.dew",
+  "country": "KR",
+  "category": "패션",
+  "source": "instagram reels search: 패션 코디"
+ },
+ {
+  "name": "INTEMPO",
+  "channel": "instagram",
+  "channel_id": "intempomood",
+  "handle": "intempomood",
+  "country": "KR",
+  "category": "패션",
+  "source": "instagram reels search: 패션 코디"
+ },
+ {
+  "name": "조유영",
+  "channel": "instagram",
+  "channel_id": "you0j___",
+  "handle": "you0j___",
+  "country": "KR",
+  "category": "패션",
+  "source": "instagram reels search: 패션 코디"
+ },
+ {
+  "name": "일상이여행",
+  "channel": "instagram",
+  "channel_id": "ilsangtravel",
+  "handle": "ilsangtravel",
+  "country": "KR",
+  "category": "여행",
+  "source": "instagram reels search: 여행 국내여행"
+ },
+ {
+  "name": "영원",
+  "channel": "instagram",
+  "channel_id": "sseo_travel",
+  "handle": "sseo_travel",
+  "country": "KR",
+  "category": "여행",
+  "source": "instagram reels search: 여행 국내여행"
+ },
+ {
+  "name": "대한민국 국가데이터처",
+  "channel": "instagram",
+  "channel_id": "mods_korea",
+  "handle": "mods_korea",
+  "country": "KR",
+  "category": "여행",
+  "source": "instagram reels search: 여행 국내여행"
+ },
+ {
+  "name": "프로미 약속스타그램",
+  "channel": "instagram",
+  "channel_id": "dbins_official",
+  "handle": "dbins_official",
+  "country": "KR",
+  "category": "여행",
+  "source": "instagram reels search: 여행 국내여행"
+ },
+ {
+  "name": "BAEKHO(KANG DONG HO)",
+  "channel": "instagram",
+  "channel_id": "this_is_baekho",
+  "handle": "this_is_baekho",
+  "country": "KR",
+  "category": "여행",
+  "source": "instagram reels search: 여행 국내여행"
+ },
+ {
+  "name": "전망키, 여행하면 전망키✌🏻",
+  "channel": "instagram",
+  "channel_id": "jmangki",
+  "handle": "jmangki",
+  "country": "KR",
+  "category": "여행",
+  "source": "instagram reels search: 여행 국내여행"
+ },
+ {
+  "name": "곽윤기 Yoon-Gy Kwak🇰🇷",
+  "channel": "instagram",
+  "channel_id": "yoongykwak",
+  "handle": "yoongykwak",
+  "country": "KR",
+  "category": "건강",
+  "source": "instagram reels search: 운동 홈트"
+ },
+ {
+  "name": "메디쌤",
+  "channel": "instagram",
+  "channel_id": "mediheal_pilates",
+  "handle": "mediheal_pilates",
+  "country": "KR",
+  "category": "건강",
+  "source": "instagram reels search: 운동 홈트"
+ },
+ {
+  "name": "마선호",
+  "channel": "instagram",
+  "channel_id": "natural_masunho",
+  "handle": "natural_masunho",
+  "country": "KR",
+  "category": "건강",
+  "source": "instagram reels search: 운동 홈트"
+ },
+ {
+  "name": "skk스트레칭&발레 유튜버🔥| 스크크쌤 | 성균관무용학원장",
+  "channel": "instagram",
+  "channel_id": "skk_stretching_ballet",
+  "handle": "skk_stretching_ballet",
+  "country": "KR",
+  "category": "건강",
+  "source": "instagram reels search: 운동 홈트"
+ },
+ {
+  "name": "유리 | 40대 홈트 20년 유지어터",
+  "channel": "instagram",
+  "channel_id": "glowfityuri",
+  "handle": "glowfityuri",
+  "country": "KR",
+  "category": "건강",
+  "source": "instagram reels search: 운동 홈트"
+ },
+ {
+  "name": "Sohyun Go",
+  "channel": "instagram",
+  "channel_id": "gosomimi",
+  "handle": "gosomimi",
+  "country": "KR",
+  "category": "건강",
+  "source": "instagram reels search: 운동 홈트"
+ },
+ {
+  "name": "디저트에 미치다, 투데이 디저트",
+  "channel": "instagram",
+  "channel_id": "today_dessert",
+  "handle": "today_dessert",
+  "country": "KR",
+  "category": "푸드",
+  "source": "instagram reels search: 카페 디저트"
+ },
+ {
+  "name": "아니버 AHNIVER (상표등록)",
+  "channel": "instagram",
+  "channel_id": "ahniver",
+  "handle": "ahniver",
+  "country": "KR",
+  "category": "푸드",
+  "source": "instagram reels search: 카페 디저트"
+ },
+ {
+  "name": "맹글 | 홈베이킹",
+  "channel": "instagram",
+  "channel_id": "maengeul_baking",
+  "handle": "maengeul_baking",
+  "country": "KR",
+  "category": "푸드",
+  "source": "instagram reels search: 카페 디저트"
+ },
+ {
+  "name": "살림홈",
+  "channel": "instagram",
+  "channel_id": "home_salimm",
+  "handle": "home_salimm",
+  "country": "KR",
+  "category": "푸드",
+  "source": "instagram reels search: 카페 디저트"
+ },
+ {
+  "name": "아미아미",
+  "channel": "instagram",
+  "channel_id": "amiami_s2",
+  "handle": "amiami_s2",
+  "country": "KR",
+  "category": "푸드",
+  "source": "instagram reels search: 카페 디저트"
+ },
+ {
+  "name": "인생꿀템 깎언니",
+  "channel": "instagram",
+  "channel_id": "lifegooditem",
+  "handle": "lifegooditem",
+  "country": "KR",
+  "category": "푸드",
+  "source": "instagram reels search: 카페 디저트"
+ },
+ {
+  "name": "베베메모",
+  "channel": "instagram",
+  "channel_id": "bebememo_kr",
+  "handle": "bebememo_kr",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 육아 일상"
+ },
+ {
+  "name": "하이델 하은💗",
+  "channel": "instagram",
+  "channel_id": "heidelflower_haeun",
+  "handle": "heidelflower_haeun",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 육아 일상"
+ },
+ {
+  "name": "최인호 (BigSimon, In-ho Choi)",
+  "channel": "instagram",
+  "channel_id": "akabigsimon",
+  "handle": "akabigsimon",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 육아 일상"
+ },
+ {
+  "name": "Zuna",
+  "channel": "instagram",
+  "channel_id": "therealzuna",
+  "handle": "therealzuna",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 육아 일상"
+ },
+ {
+  "name": "보더콜리 와드",
+  "channel": "instagram",
+  "channel_id": "ward_bordercollie",
+  "handle": "ward_bordercollie",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 강아지 반려견"
+ },
+ {
+  "name": "Haejun 김해준",
+  "channel": "instagram",
+  "channel_id": "haejun_kim_",
+  "handle": "haejun_kim_",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 강아지 반려견"
+ },
+ {
+  "name": "정부혁신",
+  "channel": "instagram",
+  "channel_id": "government.innovation_korea",
+  "handle": "government.innovation_korea",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 강아지 반려견"
+ },
+ {
+  "name": "일러스트레이터 윰마",
+  "channel": "instagram",
+  "channel_id": "myyumma",
+  "handle": "myyumma",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 강아지 반려견"
+ },
+ {
+  "name": "옥냥",
+  "channel": "instagram",
+  "channel_id": "rangdelier",
+  "handle": "rangdelier",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 인테리어 집꾸미기"
+ },
+ {
+  "name": "쏭뜰리에",
+  "channel": "instagram",
+  "channel_id": "ssongtelier",
+  "handle": "ssongtelier",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 인테리어 집꾸미기"
+ },
+ {
+  "name": "리빙유 | 홈스타그램 • 유럽감성",
+  "channel": "instagram",
+  "channel_id": "tamimamang",
+  "handle": "tamimamang",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 인테리어 집꾸미기"
+ },
+ {
+  "name": "선레스트ㅣ집꾸미기•1인가구•우드카빙",
+  "channel": "instagram",
+  "channel_id": "sunrest_",
+  "handle": "sunrest_",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 인테리어 집꾸미기"
+ },
+ {
+  "name": "유이🇰🇷| 인테리어 집꾸미기 일상기록",
+  "channel": "instagram",
+  "channel_id": "uue_home",
+  "handle": "uue_home",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 인테리어 집꾸미기"
+ },
+ {
+  "name": "slow.er 핸드메이드 가구점",
+  "channel": "instagram",
+  "channel_id": "slow.er",
+  "handle": "slow.er",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 인테리어 집꾸미기"
+ },
+ {
+  "name": "코루비 / 집꾸미기 홈인테리어 🫶",
+  "channel": "instagram",
+  "channel_id": "corub_i",
+  "handle": "corub_i",
+  "country": "KR",
+  "category": "라이프스타일",
+  "source": "instagram reels search: 인테리어 집꾸미기"
+ },
+ {
+  "name": "뿅글이",
+  "channel": "instagram",
+  "channel_id": "bbyonggeul",
+  "handle": "bbyonggeul",
+  "country": "KR",
+  "category": "재테크 & 금융",
+  "source": "instagram reels search: 재테크 짠테크"
+ },
+ {
+  "name": "아바라티비 10년 가계부 종잣돈 메이트 재테크강사",
+  "channel": "instagram",
+  "channel_id": "abara1004",
+  "handle": "abara1004",
+  "country": "KR",
+  "category": "재테크 & 금융",
+  "source": "instagram reels search: 재테크 짠테크"
+ },
+ {
+  "name": "경제&라이프스타일 매거진 | 에크케",
+  "channel": "instagram",
+  "channel_id": "ekke.now",
+  "handle": "ekke.now",
+  "country": "KR",
+  "category": "재테크 & 금융",
+  "source": "instagram reels search: 재테크 짠테크"
+ },
+ {
+  "name": "스브스뉴스",
+  "channel": "instagram",
+  "channel_id": "subusunews",
+  "handle": "subusunews",
+  "country": "KR",
+  "category": "재테크 & 금융",
+  "source": "instagram reels search: 재테크 짠테크"
+ },
+ {
+  "name": "더니 간편요리왕",
+  "channel": "instagram",
+  "channel_id": "ezckin",
+  "handle": "ezckin",
+  "country": "KR",
+  "category": "푸드",
+  "source": "instagram reels search: 요리 레시피"
+ },
+ {
+  "name": "메이크업 희진쌤 makeup heejin",
+  "channel": "tiktok",
+  "channel_id": "hee_meiku",
+  "handle": "hee_meiku",
+  "country": "KR",
+  "category": "뷰티",
+  "source": "tiktok search: 메이크업"
+ },
+ {
+  "name": "물 같은 메이크업은 없다",
+  "channel": "tiktok",
+  "channel_id": "usaair",
+  "handle": "usaair",
+  "country": "KR",
+  "category": "뷰티",
+  "source": "tiktok search: 메이크업"
+ },
+ {
+  "name": "요리용디",
+  "channel": "tiktok",
+  "channel_id": "yoriyongd",
+  "handle": "yoriyongd",
+  "country": "KR",
+  "category": "푸드",
+  "source": "tiktok search: 요리"
  }
 ]
