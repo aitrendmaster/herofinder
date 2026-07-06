@@ -240,7 +240,11 @@ class BlacklistEntry(Base):
 
 
 class CreatorAccount(Base):
-    """크리에이터 로그인 계정 — RFP 송부 시 자동 발급, 접속 코드가 이메일로 전달됨."""
+    """크리에이터 로그인 계정.
+
+    생성 경로: ① RFP 송부 시 자동 발급 ② 셀프 가입(이메일) ③ 구글 로그인 후 가입.
+    셀프 가입 시 기존 인플루언서(channel+handle 일치)에 자동 연결(claim)된다.
+    """
 
     __tablename__ = "creator_accounts"
 
@@ -248,6 +252,12 @@ class CreatorAccount(Base):
     influencer_id: Mapped[int] = mapped_column(ForeignKey("influencers.id"), unique=True)
     email: Mapped[str] = mapped_column(String(255))
     access_code: Mapped[str] = mapped_column(String(64), unique=True)  # 로그인 토큰 겸용
+    google_sub: Mapped[str | None] = mapped_column(String(64), nullable=True)  # 구글 계정 고유 ID
+    # 기획 설정 (포털 설정 화면)
+    bio: Mapped[str | None] = mapped_column(Text, nullable=True)  # 소개·주요 콘텐츠 방향
+    preferred_format: Mapped[str | None] = mapped_column(String(20), nullable=True)  # shortform | longform | package
+    preferred_length_minutes: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    available: Mapped[bool] = mapped_column(Boolean, default=True)  # 협업 가능 여부
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     last_login_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 

@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     sendgrid_api_key: str = ""
     anthropic_api_key: str = ""
     jwt_secret: str = "change-me"
+    google_client_id: str = ""  # 크리에이터 구글 로그인 (GIS ID 토큰 검증용)
 
 
 @lru_cache

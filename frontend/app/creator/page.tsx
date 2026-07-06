@@ -1,24 +1,32 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ProcessBar from "@/components/ProcessBar";
 import {
+  GOOGLE_CLIENT_ID,
+  creatorGoogleLogin,
   creatorLogin,
   creatorMessages,
   creatorNotifications,
   creatorReadNotification,
   creatorRfps,
   creatorSendMessage,
+  creatorSignup,
   creatorStore,
   creatorSubmitQuote,
+  getCreatorSettings,
+  updateCreatorSettings,
   type CreatorRfp,
   type CreatorSession,
+  type CreatorSettings,
   type Message,
   type Notification,
   type QuoteInput,
 } from "@/lib/api";
 
 const POLL_INTERVAL = 30_000;
+const inputCls =
+  "w-full rounded-md border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-black";
 
 export default function CreatorPage() {
   const [session, setSession] = useState<CreatorSession | null>(null);
@@ -39,7 +47,7 @@ export default function CreatorPage() {
       }}
     />
   ) : (
-    <CreatorLogin
+    <CreatorAuth
       onLogin={(s) => {
         creatorStore.setSession(s);
         setSession(s);
@@ -48,13 +56,83 @@ export default function CreatorPage() {
   );
 }
 
-function CreatorLogin({ onLogin }: { onLogin: (s: CreatorSession) => void }) {
-  const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
+/* ---------- 인증 (로그인 / 신규 가입 / 구글) ---------- */
+
+declare global {
+  interface Window {
+    google?: {
+      accounts: {
+        id: {
+          initialize: (config: object) => void;
+          renderButton: (el: HTMLElement, config: object) => void;
+        };
+      };
+    };
+  }
+}
+
+function CreatorAuth({ onLogin }: { onLogin: (s: CreatorSession) => void }) {
+  const [mode, setMode] = useState<"login" | "signup">("login");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const submit = async (e: React.FormEvent) => {
+  // 로그인 폼
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+
+  // 가입 폼
+  const [name, setName] = useState("");
+  const [signupEmail, setSignupEmail] = useState("");
+  const [channel, setChannel] = useState<"youtube" | "instagram" | "tiktok">("instagram");
+  const [handle, setHandle] = useState("");
+  const [googleSub, setGoogleSub] = useState<string | undefined>(undefined);
+  const [issuedCode, setIssuedCode] = useState<string | null>(null);
+  const [pendingSession, setPendingSession] = useState<CreatorSession | null>(null);
+  const googleBtnRef = useRef<HTMLDivElement>(null);
+
+  // Google Identity Services 버튼 (클라이언트 ID 설정 시에만)
+  useEffect(() => {
+    if (!GOOGLE_CLIENT_ID || issuedCode) return;
+    const setup = () => {
+      if (!window.google || !googleBtnRef.current) return;
+      window.google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: async (res: { credential: string }) => {
+          setError(null);
+          try {
+            const r = await creatorGoogleLogin(res.credential);
+            if (r.status === "ok" && r.session) {
+              onLogin(r.session);
+            } else {
+              // 미가입 → 가입 폼으로 전환 (이메일 프리필 + 구글 연동 유지)
+              setMode("signup");
+              setSignupEmail(r.email ?? "");
+              setGoogleSub(r.google_sub ?? undefined);
+            }
+          } catch (e) {
+            setError(e instanceof Error ? e.message : "구글 로그인 실패");
+          }
+        },
+      });
+      window.google.accounts.id.renderButton(googleBtnRef.current, {
+        theme: "outline",
+        size: "large",
+        width: 320,
+        text: "continue_with",
+      });
+    };
+    if (window.google) {
+      setup();
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.onload = setup;
+    document.head.appendChild(script);
+  }, [issuedCode, mode, onLogin]);
+
+  const doLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -66,44 +144,243 @@ function CreatorLogin({ onLogin }: { onLogin: (s: CreatorSession) => void }) {
     }
   };
 
+  const doSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    try {
+      const r = await creatorSignup({
+        name: name.trim(),
+        email: signupEmail.trim(),
+        channel,
+        handle: handle.trim(),
+        google_sub: googleSub,
+      });
+      // 접속 코드를 최초 1회 안내 후 입장
+      setIssuedCode(r.access_code);
+      setPendingSession(r.session);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "가입 실패");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (issuedCode && pendingSession) {
+    return (
+      <div className="mx-auto flex max-w-md flex-col gap-6 py-16 text-center">
+        <h1 className="text-2xl font-bold">가입 완료 🎉</h1>
+        <p className="text-sm text-neutral-500">
+          아래 <b>접속 코드</b>는 로그인에 사용됩니다. 지금 꼭 보관해 주세요.
+          {googleSub ? " (구글 로그인으로도 접속할 수 있습니다)" : ""}
+        </p>
+        <div className="rounded-lg border-2 border-black bg-neutral-50 p-4 font-mono text-lg font-bold tracking-wider">
+          {issuedCode}
+        </div>
+        <button
+          onClick={() => onLogin(pendingSession)}
+          className="rounded-md bg-black px-4 py-3 text-sm font-semibold text-white hover:bg-neutral-800"
+        >
+          포털 시작하기
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto flex max-w-sm flex-col gap-6 py-16">
       <div className="text-center">
         <h1 className="text-2xl font-bold tracking-tight">크리에이터 포털</h1>
         <p className="mt-2 text-sm text-neutral-500">
-          RFP 이메일에 포함된 접속 코드로 로그인하세요.
+          {mode === "login"
+            ? "RFP 이메일의 접속 코드 또는 구글 계정으로 로그인하세요."
+            : "채널 정보를 등록하면 클라이언트 제안을 받을 수 있습니다."}
         </p>
       </div>
-      <form onSubmit={submit} className="flex flex-col gap-3">
-        <input
-          className="rounded-md border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-black"
-          placeholder="이메일"
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          className="rounded-md border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-black"
-          placeholder="접속 코드"
-          required
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-        />
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded-md bg-black px-4 py-3 text-sm font-semibold text-white hover:bg-neutral-800 disabled:bg-neutral-300"
-        >
-          {loading ? "로그인 중…" : "로그인"}
-        </button>
-      </form>
+
+      {mode === "login" ? (
+        <form onSubmit={doLogin} className="flex flex-col gap-3">
+          <input className={inputCls} placeholder="이메일" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input className={inputCls} placeholder="접속 코드" required value={code} onChange={(e) => setCode(e.target.value)} />
+          {error && <p className="text-sm text-red-600">{error}</p>}
+          <button type="submit" disabled={loading} className="rounded-md bg-black px-4 py-3 text-sm font-semibold text-white hover:bg-neutral-800 disabled:bg-neutral-300">
+            {loading ? "로그인 중…" : "로그인"}
+          </button>
+        </form>
+      ) : (
+        <form onSubmit={doSignup} className="flex flex-col gap-3">
+          <input className={inputCls} placeholder="활동명 (채널명)" required value={name} onChange={(e) => setName(e.target.value)} />
+          <input className={inputCls} placeholder="컨택 이메일" type="email" required value={signupEmail} onChange={(e) => setSignupEmail(e.target.value)} />
+          <div className="grid grid-cols-3 gap-2">
+            {(["youtube", "instagram", "tiktok"] as const).map((c) => (
+              <button key={c} type="button" onClick={() => setChannel(c)}
+                className={`rounded-md border px-2 py-2.5 text-xs font-medium ${channel === c ? "border-black bg-black text-white" : "border-neutral-200 hover:border-neutral-400"}`}>
+                {c === "youtube" ? "YouTube" : c === "instagram" ? "Instagram" : "TikTok"}
+              </button>
+            ))}
+          </div>
+          <input className={inputCls} placeholder="채널 핸들 (@ 제외)" required value={handle} onChange={(e) => setHandle(e.target.value)} />
+          <p className="text-xs text-neutral-400">
+            이미 Hero Finder에 등록된 채널이면 자동으로 내 프로필로 연결됩니다.
+          </p>
+          {error && <p className="text-sm text-red-600">{error}</p>}
+          <button type="submit" disabled={loading} className="rounded-md bg-black px-4 py-3 text-sm font-semibold text-white hover:bg-neutral-800 disabled:bg-neutral-300">
+            {loading ? "가입 중…" : "가입하기"}
+          </button>
+        </form>
+      )}
+
+      {GOOGLE_CLIENT_ID ? (
+        <div className="flex flex-col items-center gap-2">
+          <div className="flex w-full items-center gap-3 text-xs text-neutral-300">
+            <span className="h-px flex-1 bg-neutral-200" /> 또는 <span className="h-px flex-1 bg-neutral-200" />
+          </div>
+          <div ref={googleBtnRef} />
+        </div>
+      ) : (
+        <p className="text-center text-xs text-neutral-300">구글 로그인은 준비 중입니다</p>
+      )}
+
+      <button
+        onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(null); }}
+        className="text-center text-sm text-neutral-500 underline hover:text-black"
+      >
+        {mode === "login" ? "처음이신가요? 신규 가입" : "이미 계정이 있어요 — 로그인"}
+      </button>
     </div>
   );
 }
 
+/* ---------- 설정 탭 (기획 설정) ---------- */
+
+function SettingsTab({ token }: { token: string }) {
+  const [settings, setSettings] = useState<CreatorSettings | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    getCreatorSettings(token)
+      .then(setSettings)
+      .catch(() => setError("설정을 불러오지 못했습니다."));
+  }, [token]);
+
+  if (error) return <p className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-600">{error}</p>;
+  if (!settings) return <p className="py-10 text-center text-sm text-neutral-400">불러오는 중…</p>;
+
+  const set = <K extends keyof CreatorSettings>(k: K, v: CreatorSettings[K]) => {
+    setSettings({ ...settings, [k]: v });
+    setSaved(false);
+  };
+
+  const save = async () => {
+    setSaving(true);
+    setError(null);
+    try {
+      const r = await updateCreatorSettings(token, {
+        contact_email: settings.contact_email ?? "",
+        bio: settings.bio ?? "",
+        preferred_format: settings.preferred_format ?? "",
+        preferred_length_minutes: settings.preferred_length_minutes ?? undefined,
+        cost_range_min: settings.cost_range_min ?? undefined,
+        cost_range_max: settings.cost_range_max ?? undefined,
+        available: settings.available,
+      });
+      setSettings(r);
+      setSaved(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "저장 실패");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const label = "text-sm font-semibold";
+  return (
+    <div className="flex max-w-2xl flex-col gap-6">
+      <div className="rounded-lg border border-neutral-200 p-5">
+        <h3 className="font-semibold">내 채널</h3>
+        <p className="mt-2 text-sm text-neutral-500">
+          {settings.channel} · @{settings.handle} · {settings.name}
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className={label}>컨택 이메일</label>
+        <input
+          className={inputCls}
+          type="email"
+          value={settings.contact_email ?? ""}
+          onChange={(e) => set("contact_email", e.target.value)}
+          placeholder="RFP·계약 관련 연락을 받을 이메일"
+        />
+        <p className="text-xs text-neutral-400">클라이언트에게는 공개되지 않으며, RFP 송부 시에만 서버에서 사용됩니다.</p>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className={label}>소개 / 주요 콘텐츠 방향</label>
+        <textarea
+          className={`${inputCls} min-h-24 resize-y`}
+          value={settings.bio ?? ""}
+          onChange={(e) => set("bio", e.target.value)}
+          placeholder="예: 20대 타깃 뷰티 튜토리얼 중심, 제품 리뷰·비교 콘텐츠 강점"
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className={label}>선호 콘텐츠 형식</label>
+        <div className="grid grid-cols-3 gap-3">
+          {([["shortform", "숏폼"], ["longform", "롱폼"], ["package", "패키지"]] as const).map(([v, t]) => (
+            <button key={v} type="button"
+              onClick={() => set("preferred_format", settings.preferred_format === v ? null : v)}
+              className={`rounded-md border px-4 py-3 text-sm font-medium ${settings.preferred_format === v ? "border-black bg-black text-white" : "border-neutral-200 hover:border-neutral-400"}`}>
+              {t}
+            </button>
+          ))}
+        </div>
+        <div className="mt-1 flex items-center gap-2">
+          <span className="text-xs font-semibold text-neutral-400">기본 길이(분)</span>
+          <input
+            className="w-24 rounded-md border border-neutral-200 px-3 py-1.5 text-sm outline-none focus:border-black"
+            type="number"
+            value={settings.preferred_length_minutes ?? ""}
+            onChange={(e) => set("preferred_length_minutes", e.target.value ? Number(e.target.value) : null)}
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className={label}>희망 단가 범위 (원)</label>
+        <div className="grid grid-cols-2 gap-3">
+          <input className={inputCls} type="number" placeholder="최소 (예: 1000000)"
+            value={settings.cost_range_min ?? ""}
+            onChange={(e) => set("cost_range_min", e.target.value ? Number(e.target.value) : null)} />
+          <input className={inputCls} type="number" placeholder="최대 (예: 3000000)"
+            value={settings.cost_range_max ?? ""}
+            onChange={(e) => set("cost_range_max", e.target.value ? Number(e.target.value) : null)} />
+        </div>
+        <p className="text-xs text-neutral-400">클라이언트 탐색 화면의 &lsquo;예상 섭외비&rsquo;로 표시됩니다.</p>
+      </div>
+
+      <label className="flex items-center gap-2 text-sm">
+        <input type="checkbox" className="h-4 w-4 accent-black" checked={settings.available}
+          onChange={(e) => set("available", e.target.checked)} />
+        현재 협업 제안을 받고 있어요
+      </label>
+
+      {error && <p className="text-sm text-red-600">{error}</p>}
+      <button onClick={save} disabled={saving}
+        className="rounded-md bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800 disabled:bg-neutral-300">
+        {saving ? "저장 중…" : saved ? "저장됨 ✓" : "설정 저장"}
+      </button>
+    </div>
+  );
+}
+
+/* ---------- 포털 본체 ---------- */
+
 function CreatorPortal({ session, onLogout }: { session: CreatorSession; onLogout: () => void }) {
+  const [tab, setTab] = useState<"rfps" | "settings">("rfps");
   const [rfps, setRfps] = useState<CreatorRfp[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [activeCampaign, setActiveCampaign] = useState<number | null>(null);
@@ -169,8 +446,8 @@ function CreatorPortal({ session, onLogout }: { session: CreatorSession; onLogou
 
   const active = rfps.find((r) => r.campaign_id === activeCampaign);
   const unread = notifications.filter((n) => !n.is_read);
-  const input =
-    "w-full rounded-md border border-neutral-200 px-3 py-2.5 text-sm outline-none focus:border-black";
+  const tabBtn = (active: boolean) =>
+    `rounded-md px-4 py-2 text-sm font-semibold transition-colors ${active ? "bg-black text-white" : "text-neutral-500 hover:bg-neutral-100"}`;
 
   return (
     <div className="flex flex-col gap-8">
@@ -181,22 +458,30 @@ function CreatorPortal({ session, onLogout }: { session: CreatorSession; onLogou
             {session.name} 님 ({session.channel}) — 받은 RFP에 견적을 제출하고 클라이언트와 소통하세요.
           </p>
         </div>
-        <button onClick={onLogout} className="rounded-md border border-neutral-200 px-4 py-2 text-sm hover:border-black">
-          로그아웃
-        </button>
+        <div className="flex items-center gap-2">
+          <nav className="flex gap-1 rounded-lg border border-neutral-200 p-1">
+            <button className={tabBtn(tab === "rfps")} onClick={() => setTab("rfps")}>받은 RFP</button>
+            <button className={tabBtn(tab === "settings")} onClick={() => setTab("settings")}>설정</button>
+          </nav>
+          <button onClick={onLogout} className="rounded-md border border-neutral-200 px-4 py-2 text-sm hover:border-black">
+            로그아웃
+          </button>
+        </div>
       </div>
 
       {error && (
         <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-600">{error}</div>
       )}
 
+      {tab === "settings" ? (
+        <SettingsTab token={session.token} />
+      ) : (
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[300px_1fr_300px]">
-        {/* 받은 RFP 목록 */}
         <aside className="flex flex-col gap-2">
           <h2 className="text-sm font-semibold">받은 업무 요청 (RFP)</h2>
           {rfps.length === 0 && (
             <p className="rounded-md border border-neutral-200 p-4 text-xs text-neutral-400">
-              아직 받은 RFP가 없습니다.
+              아직 받은 RFP가 없습니다. 설정 탭에서 컨택 이메일·단가를 등록해 두면 매칭 확률이 올라갑니다.
             </p>
           )}
           {rfps.map((r) => (
@@ -216,7 +501,6 @@ function CreatorPortal({ session, onLogout }: { session: CreatorSession; onLogou
           ))}
         </aside>
 
-        {/* 캠페인 상세 + 견적 + 메시지 */}
         <section className="flex flex-col gap-6">
           {active ? (
             <>
@@ -263,7 +547,6 @@ function CreatorPortal({ session, onLogout }: { session: CreatorSession; onLogou
                 </dl>
               </div>
 
-              {/* 견적 제출 */}
               <div className="rounded-lg border border-neutral-200 p-5">
                 <h3 className="font-semibold">1차 견적 제출</h3>
                 {quoteSent ? (
@@ -273,14 +556,14 @@ function CreatorPortal({ session, onLogout }: { session: CreatorSession; onLogou
                 ) : (
                   <div className="mt-3 flex flex-col gap-3">
                     <textarea
-                      className={`${input} min-h-20 resize-y`}
+                      className={`${inputCls} min-h-20 resize-y`}
                       placeholder="콘텐츠 기획 방향 (어떤 방향·형식으로 제작할지)"
                       value={quote.content_plan ?? ""}
                       onChange={(e) => setQuote({ ...quote, content_plan: e.target.value })}
                     />
                     <div className="grid grid-cols-3 gap-3">
                       <select
-                        className={input}
+                        className={inputCls}
                         value={quote.content_format ?? ""}
                         onChange={(e) => setQuote({ ...quote, content_format: e.target.value || undefined })}
                       >
@@ -290,7 +573,7 @@ function CreatorPortal({ session, onLogout }: { session: CreatorSession; onLogou
                         <option value="package">패키지</option>
                       </select>
                       <input
-                        className={input}
+                        className={inputCls}
                         type="number"
                         placeholder="길이(분)"
                         value={quote.length_minutes ?? ""}
@@ -299,7 +582,7 @@ function CreatorPortal({ session, onLogout }: { session: CreatorSession; onLogou
                         }
                       />
                       <input
-                        className={input}
+                        className={inputCls}
                         type="number"
                         placeholder="견적 금액(원)"
                         value={quote.amount ?? ""}
@@ -318,7 +601,6 @@ function CreatorPortal({ session, onLogout }: { session: CreatorSession; onLogou
                 )}
               </div>
 
-              {/* 메시지 */}
               <div className="flex flex-col rounded-lg border border-neutral-200">
                 <h3 className="border-b border-neutral-100 p-4 font-semibold">클라이언트와 메시지</h3>
                 <div className="flex max-h-72 flex-1 flex-col gap-3 overflow-y-auto p-4">
@@ -329,9 +611,7 @@ function CreatorPortal({ session, onLogout }: { session: CreatorSession; onLogou
                     <div
                       key={m.id}
                       className={`max-w-[75%] rounded-lg px-4 py-2.5 text-sm ${
-                        m.direction === "inbound"
-                          ? "self-end bg-black text-white" // 크리에이터 본인 발신
-                          : "self-start bg-neutral-100"
+                        m.direction === "inbound" ? "self-end bg-black text-white" : "self-start bg-neutral-100"
                       }`}
                     >
                       <p className="whitespace-pre-wrap">{m.body}</p>
@@ -343,7 +623,7 @@ function CreatorPortal({ session, onLogout }: { session: CreatorSession; onLogou
                 </div>
                 <div className="flex gap-2 border-t border-neutral-100 p-3">
                   <input
-                    className={input}
+                    className={inputCls}
                     placeholder="메시지 입력"
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
@@ -364,7 +644,6 @@ function CreatorPortal({ session, onLogout }: { session: CreatorSession; onLogou
           )}
         </section>
 
-        {/* 내 알림 */}
         <aside className="flex flex-col gap-3">
           <h2 className="text-sm font-semibold">
             내 알림{" "}
@@ -414,6 +693,7 @@ function CreatorPortal({ session, onLogout }: { session: CreatorSession; onLogou
           </div>
         </aside>
       </div>
+      )}
     </div>
   );
 }

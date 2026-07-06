@@ -227,6 +227,66 @@ export interface QuoteInput {
 
 const creatorHeaders = (token: string) => ({ "X-Creator-Token": token });
 
+export interface CreatorSignupInput {
+  name: string;
+  email: string;
+  channel: "youtube" | "instagram" | "tiktok";
+  handle: string;
+  google_sub?: string;
+}
+
+export interface CreatorSignupResult {
+  session: CreatorSession;
+  access_code: string; // 최초 1회만 노출
+  claimed_existing: boolean;
+}
+
+export interface GoogleLoginResult {
+  status: "ok" | "needs_signup";
+  session: CreatorSession | null;
+  email: string | null;
+  google_sub: string | null;
+}
+
+export interface CreatorSettings {
+  name: string;
+  channel: string;
+  handle: string;
+  contact_email: string | null;
+  bio: string | null;
+  preferred_format: string | null;
+  preferred_length_minutes: number | null;
+  cost_range_min: number | null;
+  cost_range_max: number | null;
+  available: boolean;
+}
+
+export const creatorSignup = (payload: CreatorSignupInput) =>
+  request<CreatorSignupResult>("/api/auth/creator/signup", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+export const creatorGoogleLogin = (idToken: string) =>
+  request<GoogleLoginResult>("/api/auth/creator/google", {
+    method: "POST",
+    body: JSON.stringify({ id_token: idToken }),
+  });
+
+export const getCreatorSettings = (token: string) =>
+  request<CreatorSettings>("/api/creator/settings", {
+    headers: { "Content-Type": "application/json", ...creatorHeaders(token) },
+  });
+
+export const updateCreatorSettings = (token: string, payload: Partial<CreatorSettings>) =>
+  request<CreatorSettings>("/api/creator/settings", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...creatorHeaders(token) },
+    body: JSON.stringify(payload),
+  });
+
+export const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "";
+
 export const creatorLogin = (email: string, accessCode: string) =>
   request<CreatorSession>("/api/auth/creator/login", {
     method: "POST",

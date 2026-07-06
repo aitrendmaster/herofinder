@@ -248,6 +248,56 @@ class CreatorLoginIn(BaseModel):
     access_code: str
 
 
+class CreatorSignupIn(BaseModel):
+    """셀프 가입 — channel+handle이 기존 인플루언서와 일치하면 자동 연결(claim)."""
+
+    name: str
+    email: str  # 컨택 이메일 (본인 제공 — 동의 기반)
+    channel: str  # youtube | instagram | tiktok
+    handle: str  # 채널 핸들 (@제외)
+    google_sub: str | None = None  # 구글 가입 경유 시
+
+
+class CreatorSignupOut(BaseModel):
+    session: "CreatorSessionOut"
+    access_code: str  # 최초 1회만 노출 — 이메일 발송 활성화 전까지 직접 보관
+    claimed_existing: bool  # 기존 인플루언서 프로필에 연결됐는지
+
+
+class GoogleLoginIn(BaseModel):
+    id_token: str
+
+
+class GoogleLoginOut(BaseModel):
+    status: str  # ok | needs_signup
+    session: "CreatorSessionOut | None" = None
+    email: str | None = None  # needs_signup일 때 가입 폼 프리필용
+    google_sub: str | None = None
+
+
+class CreatorSettingsIn(BaseModel):
+    contact_email: str | None = None  # 컨택 이메일 (RFP 수신 주소)
+    bio: str | None = None
+    preferred_format: str | None = None  # shortform | longform | package
+    preferred_length_minutes: int | None = None
+    cost_range_min: int | None = None  # 희망 단가 (원) — 탐색 화면 예상 섭외비에 반영
+    cost_range_max: int | None = None
+    available: bool | None = None
+
+
+class CreatorSettingsOut(BaseModel):
+    name: str
+    channel: str
+    handle: str
+    contact_email: str | None
+    bio: str | None
+    preferred_format: str | None
+    preferred_length_minutes: int | None
+    cost_range_min: int | None
+    cost_range_max: int | None
+    available: bool
+
+
 class CreatorSessionOut(BaseModel):
     token: str  # access_code 그대로 — X-Creator-Token 헤더로 전달
     influencer_id: int
