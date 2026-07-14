@@ -1,5 +1,7 @@
+import secrets
 from functools import lru_cache
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -16,7 +18,12 @@ class Settings(BaseSettings):
     tiktok_ttcm_client_secret: str = ""
     sendgrid_api_key: str = ""
     anthropic_api_key: str = ""
-    jwt_secret: str = "change-me"
+    # 프로덕션은 반드시 JWT_SECRET env 로 고정값 지정(재시작 간 토큰 유지).
+    # 미지정 시 프로세스마다 랜덤 — 공개 리포에 고정 시크릿을 두지 않기 위함(구 "change-me" 제거).
+    jwt_secret: str = Field(default_factory=lambda: secrets.token_hex(32))
+    # 관리자 API 토큰. 설정 시 /api/admin/* 는 X-Admin-Token 헤더 일치 요구.
+    # 프로덕션 배포 전 반드시 설정할 것(미설정 시 개발 편의로 통과).
+    admin_api_token: str = ""
     google_client_id: str = ""  # 크리에이터 구글 로그인 (GIS ID 토큰 검증용)
 
 

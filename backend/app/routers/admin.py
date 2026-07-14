@@ -1,4 +1,4 @@
-from fastapi import APIRouter, BackgroundTasks, Depends
+from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -7,8 +7,18 @@ from ..models.orm_models import BlacklistEntry
 from ..models.schemas import BlacklistCreate, BlacklistOut
 from ..services.notification_service import get_sweep_status, run_reminder_sweep
 from ..services.pipeline import get_pipeline_status, run_weekly_pipeline
+from ..utils.config import get_settings
 
-router = APIRouter(prefix="/api/admin", tags=["admin"])
+
+def require_admin(x_admin_token: str | None = Header(default=None)):
+    """관리자 라우트 가드. ADMIN_API_TOKEN 이 설정돼 있으면 헤더 일치를 요구한다.
+    미설정(개발) 시에는 통과 — 프로덕션 배포 전 반드시 ADMIN_API_TOKEN 을 설정할 것."""
+    expected = get_settings().admin_api_token
+    if expected and x_admin_token != expected:
+        raise HTTPException(status_code=403, detail="admin token required")
+
+
+router = APIRouter(prefix="/api/admin", tags=["admin"], dependencies=[Depends(require_admin)])
 
 
 @router.post("/pipeline/run")
